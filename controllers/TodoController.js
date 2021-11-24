@@ -6,7 +6,7 @@ const isUserLoggedIn = require("../utils/auth");
 router.get("/", isUserLoggedIn, async (req, res) => {
   try {
     const Todo = req.context.models.Todo;
-    res.json(await Todo.find({ username: req.payload.username }));
+    res.json(await Todo.findAll({ where: { username: req.payload.username } }));
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -28,7 +28,7 @@ router.put("/:id", isUserLoggedIn, async (req, res) => {
   try {
     const Todo = req.context.models.Todo;
     const id = req.params.id;
-    res.json(await Todo.findByIdAndUpdate(id, req.body, { new: true }));
+    res.json(await Todo.update(req.body, { where: { id } }));
   } catch (error) {
     res.status(400).json({ error });
   }
@@ -39,7 +39,7 @@ router.delete("/:id", isUserLoggedIn, async (req, res) => {
   try {
     const Todo = req.context.models.Todo;
     const id = req.params.id;
-    res.json(await Todo.findByIdAndRemove(id));
+    res.json(await Todo.destroy({ where: { id } }));
   } catch (error) {
     res.status(400).json({ error });
   }

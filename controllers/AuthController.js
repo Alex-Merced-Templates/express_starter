@@ -26,14 +26,14 @@ router.post("/signup", async (req, res) => {
 // login route "/auth/login"
 router.post("/login", async (req, res) => {
   try {
-      console.count("login")
+    console.count("login");
     // grab model from context
     const User = req.context.models.User;
-    console.count("login")
+    console.count("login");
     // grab username and password
     const { username, password } = req.body;
     // see if user exists
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ where: { username } });
     if (user) {
       // check if password matches
       const doesItMatch = await bcrypt.compare(password, user.password);
@@ -57,8 +57,8 @@ router.post("/login", async (req, res) => {
 
 // logout "/auth/logout"
 router.get("/logout", async (req, res) => {
-    res.clearCookie("token").json({response: "You are Logged Out"})
-})
+  res.clearCookie("token").json({ response: "You are Logged Out" });
+});
 
 // Export Router
 module.exports = router;

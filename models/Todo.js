@@ -1,18 +1,20 @@
 // import connection, grab schema and model
-const { Schema, model } = require("../connection/db");
+const sequalize = require("../connection/db")
+const {DataTypes} = require("sequelize")
 
-// define Todo schema
-const todoSchema = new Schema(
-  {
-    message: { type: String, required: true },
-    completed: { type: Boolean, default: false },
-    username: { type: String, required: true },
-  },
-  { timestamps: true }
-);
+// Define Todo Model
+const Todo = sequalize.define("Todo", {
+    username: {type: DataTypes.STRING, allowNull: false},
+    message: {type: DataTypes.STRING}
+}, {tableName: "todos", timestamps: true})
 
-// define Todo model
-const Todo = model("Todo", todoSchema);
+// create the table if doesn't exist
 
-// export Todo
-module.exports = Todo;
+async function createTable(){
+    await Todo.sync()
+}
+
+createTable()
+
+// export User
+module.exports = Todo

@@ -1,15 +1,21 @@
 // import connection, grab schema and model
-const {Schema, model} = require("../connection/db")
+const sequalize = require("../connection/db")
+const {DataTypes} = require("sequelize")
 
-// define user schema
-const userSchema = new Schema({
-    username: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    role: {type: String, required: true, default: "general"}
-}, {timestamps: true})
+// Define User Model
+const User = sequalize.define("User", {
+    username: {type: DataTypes.STRING, allowNull: false, unique: true},
+    password: {type: DataTypes.STRING, allowNull: false},
+    role: {type: DataTypes.STRING, allowNull: false, defaultValue: "general"}
+}, {tableName: "users", timestamps: true})
 
-// define user model
-const User = model("User", userSchema)
+// create the table if doesn't exist
+
+async function createTable(){
+    await User.sync()
+}
+
+createTable()
 
 // export User
 module.exports = User

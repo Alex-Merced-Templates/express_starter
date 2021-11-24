@@ -1,17 +1,21 @@
-require("dotenv").config()
-const mongoose = require("mongoose")
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
 
-// get env variables
-const { DATABASE_URL } = process.env
+// connect to database
+const sequelize = new Sequelize(process.env.DATABASE_URL)
 
-// connect to mongoose
-mongoose.connect(DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 
-// Connection Messages
-mongoose.connection
-.on("open", () => console.log("Connected to Mongo"))
-.on("close", () => console.log("Disconnected from Mongo"))
-.on("error", (error) => console.log(error))
+// check if connection established
+async function checkConnection() {
+    try {
+      await sequelize.authenticate();
+      console.log("Connection has been established successfully.");
+    } catch (error) {
+      console.error("Unable to connect to the database:", error);
+    }
+  }
 
-// export connection
-module.exports = mongoose
+checkConnection()
+
+//export connection
+module.exports = sequelize;
