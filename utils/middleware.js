@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser")
 const morgan = require("morgan")
 const cors = require("cors")
 const corsOptions = require("./cors")
+const HomeController = require("../controllers/HomeController")
 
 // function to create context property in every request with shared data
 const applicationContext = (req, res, next) => {
@@ -18,7 +19,8 @@ const registerMiddleware = (app) => {
     app.use(cookieParser()) // parse cookies
     app.use(express.json()) // parse json bodies
     app.use(morgan("tiny")) // logging
-    app.use(applicationContext()) // add context object to request
+    app.use(applicationContext) // add context object to request
+    app.use("/", HomeController) // register homecontroller routes for  "/" urls
 }
 
 module.exports = registerMiddleware
